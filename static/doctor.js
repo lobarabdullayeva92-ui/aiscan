@@ -182,7 +182,8 @@
       const s = assignSlot(info); if (s < 0) continue; used[s] = true;
       // bemor ma'lumoti (birinchi topilganda)
       if (!$("patInfo").textContent) {
-        $("patInfo").innerHTML = (info.patient_id ? "ID: " + esc(info.patient_id) : "Bemor") +
+        // Doctor sahifasida bemor shaxsi ANONIM ko'rsatiladi (PHI faylda saqlanadi, UI'da emas)
+        $("patInfo").innerHTML = "Bemor: <b>anonim</b>" +
           (info.study_date ? " <small>Sana: " + esc(info.study_date) + "</small>" : "");
       }
       setCellTitle(s, info); setRailName(s, info);
