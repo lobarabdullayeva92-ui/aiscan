@@ -2,6 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# Model vaznlari GitHub'ga YUBORILMAYDI — faqat serverdagi doctor/models/ da bo'ladi
-# (tibbiy AI vaznlari; public repoga oshkor qilinmaydi). models/README.md tracked qoladi.
+# Model vaznlari — asosan GitHub'ga yuborilmaydi (serverdagi doctor/models/ da bo'ladi).
+# Faqat 2 ta ASOSIY model (default detektor + klassifikator, <100MB) push qilinadi.
 *.pt
+!models/trained_8class_yolo11l.pt
+!models/trained_bm_yolo11m_cls.pt

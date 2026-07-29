@@ -8,7 +8,7 @@ uchun ikkitasi `.gitignore` orqali repodan chetlangan — lekin serverdagi papka
 |------|------|----------|-----------|
 | `trained_8class_yolo11l.pt` | ~49 MB | **Default detektor** (8-sinf, YOLO11l) — o'choqlarni topish | ✅ bor |
 | `trained_bm_yolo11m_cls.pt` | ~20 MB | **Klassifikator** (benign/malignant tashxis) | ✅ bor |
-| `gmic/gmic_bm_finetuned.pt` | ~54 MB | GMIC (NYU MIL) — muqobil tashxis (backup) | ✅ bor |
+| `gmic/gmic_bm_finetuned.pt` | ~54 MB | GMIC (NYU MIL) — muqobil tashxis (backup) | ❌ faqat serverda |
 | `trained_digitaleye11.pt` | ~109 MB | Ansambl uchun qo'shimcha detektor (ixtiyoriy) | ❌ >100MB (faqat serverda) |
 | `trained_8class_ai_v2_ep50.pt` | ~154 MB | Ansambl uchun eng kuchli detektor (ixtiyoriy) | ❌ >100MB (faqat serverda) |
 
