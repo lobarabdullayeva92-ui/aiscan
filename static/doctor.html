@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vrach paneli — AI Mammografiya</title>
+<!-- Uslub alohida faylda (integratsiyada /doctor.css sifatida joylashtiriladi).
+     Jonli platformada inline <style> ishlatilgan (CSP style-src 'unsafe-inline'). -->
+<link rel="stylesheet" href="/doctor.css">
+</head>
+<body>
+  <div class="top">
+    <h1>🩺 AI Mammografiya — Vrach paneli</h1>
+    <span class="sp"></span>
+    <span class="chip" id="userChip"></span>
+    <button class="btn sec sm" id="logoutBtn">Chiqish</button>
+  </div>
+
+  <div class="wrap">
+    <div class="drop" id="drop">
+      <div class="big">📤</div>
+      <div style="font-weight:700; font-size:16px">Mammogramma faylini yuklang</div>
+      <div class="hint">DICOM (.dcm) faylini bosib tanlang yoki shu yerga tashlang</div>
+      <input type="file" id="file" accept=".dcm,application/dicom" class="hidden">
+    </div>
+
+    <div id="result" class="grid hidden">
+      <div class="card">
+        <div class="tools">
+          <label class="toggle"><input type="checkbox" id="tgHeat" checked> 🔥 Issiqlik xaritasi</label>
+          <label class="toggle"><input type="checkbox" id="tgBox" checked> 🟧 Shubhali sohalar</label>
+          <span class="sp" style="flex:1"></span>
+          <button class="btn sec sm" id="newBtn">↺ Yangi tekshiruv</button>
+        </div>
+        <div class="viewer" id="viewer">
+          <img class="base" id="baseImg" alt="">
+          <div class="layer" id="layer">
+            <img id="heatImg" alt="">
+          </div>
+        </div>
+        <div class="muted" style="font-size:12px; margin-top:8px" id="imgMeta"></div>
+      </div>
+
+      <div class="card diag" id="diagCard">
+        <h2>AI tashxis (qaror qo'llab-quvvatlash)</h2>
+        <div id="diagBody"><span class="muted">…</span></div>
+        <div class="note">
+          ⚠️ Bu — sun'iy intellekt yordamchi tahlili (qaror qo'llab-quvvatlash),
+          yakuniy tashxis emas. Klinik qaror mutaxassis vrach zimmasida.
+        </div>
+      </div>
+    </div>
+
+    <div id="loading" class="banner hidden"><span class="spin"></span> Tahlil qilinmoqda — bir necha soniya kuting…</div>
+    <div id="msg" class="banner hidden"></div>
+  </div>
+
+  <div class="overlay" id="loginOverlay">
+    <form class="login" id="loginForm">
+      <h2>🩺 Vrach kirishi</h2>
+      <p>AI Mammografiya diagnostika paneli</p>
+      <div class="err" id="loginErr"></div>
+      <input id="lUser" placeholder="Foydalanuvchi nomi" autocomplete="username">
+      <input id="lPass" type="password" placeholder="Parol" autocomplete="current-password">
+      <input id="lTotp" placeholder="TOTP kod (agar yoqilgan bo'lsa)" inputmode="numeric" class="hidden">
+      <button class="btn" type="submit" id="loginBtn" style="width:100%">Kirish</button>
+    </form>
+  </div>
+
+  <script src="/doctor.js"></script>
+</body>
+</html>

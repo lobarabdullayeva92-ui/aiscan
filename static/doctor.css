@@ -1,0 +1,65 @@
+:root{
+  --bg:#0f172a; --panel:#111c33; --card:#152242; --line:#24304f; --muted:#94a3b8;
+  --txt:#e6edf7; --accent:#3b82f6; --good:#22c55e; --bad:#ef4444; --warn:#f59e0b;
+}
+*{box-sizing:border-box}
+body{margin:0; font-family:system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--txt);}
+a{color:var(--accent)}
+.top{display:flex; align-items:center; gap:12px; padding:12px 18px; background:var(--panel);
+  border-bottom:1px solid var(--line); position:sticky; top:0; z-index:10}
+.top h1{font-size:17px; margin:0; font-weight:800; letter-spacing:.2px}
+.top .sp{flex:1}
+.chip{font-size:13px; color:var(--muted)}
+.btn{background:var(--accent); color:#fff; border:0; padding:10px 16px; border-radius:10px;
+  font-weight:700; cursor:pointer; font-size:14px}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+.btn.sec{background:transparent; border:1px solid var(--line); color:var(--txt)}
+.btn.sm{padding:7px 12px; font-size:13px}
+.wrap{max-width:1200px; margin:0 auto; padding:18px}
+.drop{border:2px dashed var(--line); border-radius:16px; padding:38px 20px; text-align:center;
+  background:var(--card); cursor:pointer; transition:.15s}
+.drop:hover,.drop.over{border-color:var(--accent); background:#16233f}
+.drop .big{font-size:40px}
+.drop .hint{color:var(--muted); font-size:13px; margin-top:6px}
+.grid{display:grid; grid-template-columns:1fr 360px; gap:16px; margin-top:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px}
+.viewer{position:relative; background:#000; border-radius:12px; overflow:hidden; min-height:200px;
+  display:flex; align-items:center; justify-content:center}
+.viewer img.base{display:block; max-width:100%; height:auto}
+.layer{position:absolute; inset:0; pointer-events:none}
+.layer img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain}
+.box{position:absolute; border:2px solid var(--warn); border-radius:3px; box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+.box b{position:absolute; top:-19px; left:-2px; background:var(--warn); color:#111; font-size:11px;
+  font-weight:800; padding:1px 5px; border-radius:4px; white-space:nowrap}
+.tools{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0}
+.toggle{display:flex; align-items:center; gap:7px; font-size:13px; background:var(--panel);
+  border:1px solid var(--line); padding:7px 11px; border-radius:10px; cursor:pointer; user-select:none}
+.toggle input{accent-color:var(--accent); width:16px; height:16px}
+.diag h2{font-size:14px; margin:0 0 10px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em}
+.verdict{font-size:22px; font-weight:800; margin:2px 0 4px}
+.verdict.mal{color:var(--bad)} .verdict.ben{color:var(--good)}
+.bar{height:12px; border-radius:6px; background:var(--panel); overflow:hidden; margin:4px 0 10px}
+.bar > i{display:block; height:100%}
+.prob-row{font-size:13px; display:flex; justify-content:space-between; margin-bottom:2px}
+.findings{list-style:none; padding:0; margin:8px 0 0}
+.findings li{display:flex; justify-content:space-between; gap:8px; padding:7px 0;
+  border-bottom:1px solid var(--line); font-size:14px}
+.findings .cf{color:var(--warn); font-weight:700}
+.muted{color:var(--muted)}
+.note{font-size:12px; color:var(--muted); margin-top:12px; line-height:1.5;
+  border-top:1px solid var(--line); padding-top:10px}
+.spin{display:inline-block; width:16px; height:16px; border:3px solid #ffffff55;
+  border-top-color:#fff; border-radius:50%; animation:sp .8s linear infinite; vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+.overlay{position:fixed; inset:0; background:rgba(6,11,25,.92); display:flex; align-items:center;
+  justify-content:center; z-index:50}
+.login{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:26px;
+  width:340px; max-width:92vw}
+.login h2{margin:0 0 4px} .login p{margin:0 0 16px; color:var(--muted); font-size:13px}
+.login input{width:100%; padding:11px 12px; margin-bottom:10px; border-radius:10px;
+  border:1px solid var(--line); background:var(--panel); color:var(--txt); font-size:15px}
+.err{color:var(--bad); font-size:13px; min-height:18px; margin-bottom:6px}
+.banner{background:#3b82f61a; border:1px solid var(--accent); color:#cfe0ff; padding:10px 14px;
+  border-radius:12px; font-size:13px; margin-top:14px}
