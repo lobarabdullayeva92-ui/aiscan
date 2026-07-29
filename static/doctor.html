@@ -3,62 +3,115 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vrach paneli — AI Mammografiya</title>
-<!-- Uslub alohida faylda (integratsiyada /doctor.css sifatida joylashtiriladi).
-     Jonli platformada inline <style> ishlatilgan (CSP style-src 'unsafe-inline'). -->
+<title>Vrach paneli — AI Scan</title>
 <link rel="stylesheet" href="/doctor.css">
 </head>
 <body>
   <div class="top">
-    <h1>🩺 AI Mammografiya — Vrach paneli</h1>
+    <h1>🩺 AI Scan</h1>
+    <span class="pat" id="patInfo"></span>
     <span class="sp"></span>
+    <button class="btn sm" id="reportBtn">📄 Hisobot</button>
+    <button class="btn sec sm" id="newBtn">🆕 Yangi</button>
     <span class="chip" id="userChip"></span>
     <button class="btn sec sm" id="logoutBtn">Chiqish</button>
   </div>
 
-  <div class="wrap">
+  <div id="loading" class="banner hidden">
+    <div style="display:flex; align-items:center; gap:10px">
+      <span class="spin"></span><span id="loadTxt">Yuklanmoqda…</span>
+    </div>
+    <div class="prog" id="prog"></div>
+  </div>
+  <div id="msg" class="banner hidden"></div>
+
+  <!-- Boshlang'ich: papka yuklash -->
+  <div class="dropwrap" id="dropwrap">
     <div class="drop" id="drop">
-      <div class="big">📤</div>
-      <div style="font-weight:700; font-size:16px">Mammogramma faylini yuklang</div>
-      <div class="hint">DICOM (.dcm) faylini bosib tanlang yoki shu yerga tashlang</div>
-      <input type="file" id="file" accept=".dcm,application/dicom" class="hidden">
+      <div class="big">📁</div>
+      <div style="font-weight:700; font-size:16px">Bemor papkasini yuklang</div>
+      <div class="hint">Mammogramma <b>papkasini</b> tanlang — dastur ichidan DICOM fayllarni
+        avtomatik topadi (R-CC, L-CC, R-MLO, L-MLO). O'choq avtomatik aniqlanadi.</div>
+      <input type="file" id="file" webkitdirectory directory multiple class="hidden">
     </div>
+  </div>
 
-    <div id="result" class="grid hidden">
-      <div class="card">
-        <div class="tools">
-          <label class="toggle"><input type="checkbox" id="tgHeat" checked> 🔥 Issiqlik xaritasi</label>
-          <label class="toggle"><input type="checkbox" id="tgBox" checked> 🟧 Shubhali sohalar</label>
-          <span class="sp" style="flex:1"></span>
-          <button class="btn sec sm" id="newBtn">↺ Yangi tekshiruv</button>
-        </div>
-        <div class="viewer" id="viewer">
-          <img class="base" id="baseImg" alt="">
-          <div class="layer" id="layer">
-            <img id="heatImg" alt="">
-          </div>
-        </div>
-        <div class="muted" style="font-size:12px; margin-top:8px" id="imgMeta"></div>
+  <!-- Ish stansiyasi -->
+  <div class="ws hidden" id="ws">
+    <aside class="rail">
+      <h4>Ko'rinishlar</h4>
+      <div class="hang" id="hang">
+        <div data-k="RCC">RCC</div><div data-k="LCC">LCC</div>
+        <div data-k="RMLO">RMLO</div><div data-k="LMLO">LMLO</div>
+      </div>
+      <div id="railViews"></div>
+    </aside>
+
+    <main class="stage">
+      <div id="grid" class="quad"></div>
+    </main>
+
+    <aside class="panel">
+      <div class="pb" id="rightBreast">
+        <div class="pb-head"><span>O'ng ko'krak</span><span class="n" id="rbN">0 o'choq</span></div>
+        <div class="pb-tags" id="rbTags"></div>
+      </div>
+      <div class="pb" id="leftBreast">
+        <div class="pb-head"><span>Chap ko'krak</span><span class="n" id="lbN">0 o'choq</span></div>
+        <div class="pb-tags" id="lbTags"></div>
       </div>
 
-      <div class="card diag" id="diagCard">
-        <h2>AI tashxis (qaror qo'llab-quvvatlash)</h2>
-        <div id="diagBody"><span class="muted">…</span></div>
-        <div class="note">
-          ⚠️ Bu — sun'iy intellekt yordamchi tahlili (qaror qo'llab-quvvatlash),
-          yakuniy tashxis emas. Klinik qaror mutaxassis vrach zimmasida.
-        </div>
+      <div class="tabs">
+        <button id="tabFindBtn" class="on">Rasm topilmalari</button>
+        <button id="tabAdvBtn">Boshqaruv tavsiyalari</button>
+        <button class="btn sec sm copy" id="copyBtn">⧉ Nusxa</button>
+      </div>
+      <div class="tabbody" id="tabFindings"><span class="muted">Tahlildan so'ng bu yerda chiqadi…</span></div>
+      <div class="tabbody hidden" id="tabAdvice"><span class="muted">Tahlildan so'ng AI (Ollama) tavsiyalari chiqadi…</span></div>
+    </aside>
+
+    <div class="bottom">
+      <span style="font-weight:700; font-size:12px">O'choq turlari:</span>
+      <label class="flt"><input type="checkbox" id="fAll" checked> Barchasi</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="mass" checked> Massa</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="calcification" checked> Kalsifikatsiya</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="architectural_distortion" checked> Arxitektura</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="asymmetry" checked> Assimetriya</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="lymph_node" checked> Limfa</label>
+      <label class="flt"><input type="checkbox" class="ff" data-g="other" checked> Boshqa</label>
+      <span class="sep"></span>
+      <label class="flt"><input type="checkbox" id="tgHeat" checked> 🔥 Overlay (issiqlik)</label>
+      <label class="flt"><input type="checkbox" id="tgOrig"> 🖼️ Asl rasm</label>
+      <span class="sep"></span>
+      <span class="rng">☀️ <input type="range" id="rngBright" min="0.5" max="2" step="0.05" value="1"></span>
+      <span class="rng">◐ <input type="range" id="rngContrast" min="0.5" max="2" step="0.05" value="1"></span>
+      <button class="btn sec sm" id="resetImg">↺ Asl</button>
+    </div>
+  </div>
+
+  <!-- zoom modal -->
+  <div class="zoom hidden" id="zoom">
+    <div class="zoom-head">
+      <span style="font-weight:800" id="zTitle"></span>
+      <span class="sp" style="flex:1"></span>
+      <button class="btn sec sm" id="zOrig">🖼️ Asl rasm</button>
+      <button class="btn sec sm" id="zOut">➖</button>
+      <button class="btn sec sm" id="zIn">➕</button>
+      <button class="btn sec sm" id="zReset">1:1</button>
+      <button class="btn sec sm" id="zClose">✕ Yopish</button>
+    </div>
+    <div class="zoom-body" id="zBody">
+      <div class="zoom-stage" id="zStage">
+        <img class="base" id="zImg" alt="">
+        <div class="layer" id="zLayer"><img class="heat" id="zHeat" alt=""></div>
       </div>
     </div>
-
-    <div id="loading" class="banner hidden"><span class="spin"></span> Tahlil qilinmoqda — bir necha soniya kuting…</div>
-    <div id="msg" class="banner hidden"></div>
   </div>
 
   <div class="overlay" id="loginOverlay">
     <form class="login" id="loginForm">
       <h2>🩺 Vrach kirishi</h2>
-      <p>AI Mammografiya diagnostika paneli</p>
+      <p>AI Scan diagnostika paneli</p>
       <div class="err" id="loginErr"></div>
       <input id="lUser" placeholder="Foydalanuvchi nomi" autocomplete="username">
       <input id="lPass" type="password" placeholder="Parol" autocomplete="current-password">
